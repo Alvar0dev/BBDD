@@ -47,10 +47,11 @@
 -- Añade las siguientes restricciones:
 
 -- Modifica el campo que has creado anteriormente para que la edad del alumno o alumna esté comprendida entre 14 y 65 años. x
--- Modifica el campo Número de horas del CURSO de manera que solo pueda haber cursos con 30, 40 o 60 horas.
--- No podemos añadir un curso si su número máximo de alumnos es inferior a 15.
+-- Modifica el campo Número de horas del CURSO de manera que solo pueda haber cursos con 30, 40 o 60 horas.x
+-- No podemos añadir un curso si su número máximo de alumnos es inferior a 15.x
 -- Elimina la restricción que controla los valores que puede tomar el atributo Sexo.
 -- Elimina la columna Dirección de la tabla PROFESORES.
+
 -- Cambia la clave primaria de la tabla PROFESORES por Nombre y Apellidos.
 -- Renombra la tabla PROFESORES por TUTORES.
 -- Elimina la tabla ALUMNOS.
@@ -72,8 +73,7 @@ CREATE TABLE ALUMNOS {
     IdCurso VARCHAR(10) FOREING KEY REFERENCES CURSOS (IdCurso),
 
     CONSTRAINT FK_ALUMNOS_IDCurso FOREING KEY 
-    REFERENCES CURSOS(IdCurso)
-    CONTRAINT CK_Cursos_FechaIniFin
+    REFERENCES CURSOS(IdCurso),
 
     CONSTRAINT FK_ALUMNOS_Nif_Alumnos FOREING KEY
     REFERENCES PROFESORES (Nif_Profesor),
@@ -121,5 +121,26 @@ ALTER TABLE ALUMNOS
 ALTER TABLE CURSOS
     MODIFY TotalHoras CHECK (TotalHoras IN (30, 40 , 60)),
     MODIFY MaxAlumos CHECK (MaxAlumnos IN (>=15))
+
+ALTER TABLE ALUMNOS 
+    DROP CONSTRAINT CK_Alumnos_Sexo
+
+ALTER TABLE PROFESORES
+    DROP COLUMN Dirección
+
+ALTER TABLE PROFESORES
+    DROP NIF PRIMARY KEY,
+    ADD (Nombre, Apellido1) PRIMARY KEY;
+
+ALTER TABLE PROFESORES
+    RENAME TO TUTORES
+
+DROP TABLE ALUMNOS
+
+CREATE USER ALVARO IDENTIFIED BY BD02
+
+GRANT ALL PRIVILEGES ON CURSOS TO ALVARO
+
+REVOKE UPDATE, DELETE ON CURSOS FROM ALVARO
 
 
